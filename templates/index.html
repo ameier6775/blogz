@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="build-a-blog">Authors</h1>
+<form action='/' method='GET'>
+    <table>
+        <thead class="header-wrapper">
+        {% for user in users %}
+        <tr>
+            <td><h3 class="header">{{ user.username }}</h3></td>
+        </tr>    
+        {% endfor %}
+    </thead>
+    <tbody>
+        <tr>
+            <td><p>{{ content }}</p></td>
+        </tr>
+    </tbody>
+    </table>
+</form>
+{% endblock %}

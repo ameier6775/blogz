@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>BLOG ABOUT IT!</h1>
+<p>If you don't have an account you may <a href='/signup'>create one here</a></p>
+<form action='/login'method='post'>
+    <table>
+        <tr>
+            <td><label for='username'>USERNAME</label></td>
+            <td><input name='username' type='text' value="{{ username }}"></td>
+            {% if user_error %}
+            <p class="error">{{ user_error }}</p>
+            {% endif %}
+        </tr>
+        <tr>
+            <td><label for='password'>PASSWORD</label></td>
+            <td><input name='password' type='password'></td>
+            {% if pass_error %}
+            <p class="error">{{ pass_error }}</p>
+            {% endif %}
+        </tr>
+    </table>
+    <input type='submit' value='Login'>
+</form>
+{% endblock %}
