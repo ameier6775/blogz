@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="build-a-blog">Authors</h1>
+<h1 class="build-a-blog">Authors - Titles</h1>
 <form action='/' method='GET'>
     <table>
         <thead class="header-wrapper">
         {% for user in users %}
-        <tr>
-            <td><h3 class="header">{{ user.username }}</h3></td>
-        </tr>    
+        <tr><td><h3 class="header">{{ user.username }}</h3></td>
+        {% for blog in blogs %}
+        {% if blog.owner_id == user.id %}
+        <td><p>-{{ blog.title }}</p></td>
+        {% endif %}
+        {% endfor %}
+        </tr>  
         {% endfor %}
     </thead>
     <tbody>
