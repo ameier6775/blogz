@@ -10,7 +10,9 @@
     </thead>
     <tbody>
         <tr>
-            <td><p>{{ content }}</p></td>
+            <td><p>{{ content }}
+                <p>Written By:<a href='/author/{{user.id}}'>{{ user.username }}</a></p>
+            </p></td>
         </tr>
     </tbody>
     </table>

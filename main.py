@@ -26,7 +26,7 @@ class Blog(db.Model):
         self.owner = owner
 
     def __repr__(self):
-        return '<Blog %>' % self.id
+        return '<Blog {0}>'.format(self.title)
 
 class User(db.Model):
 
@@ -47,6 +47,15 @@ def require_login():
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')        
 
+@app.route('/author/<id>')
+def get_author(id):
+    if request.method == 'GET':
+        if(id is not None):
+            users = User.query.filter_by(exist=True, id=id).all()
+            blogs = Blog.query.filter_by(exist=True).all()
+            user = User.query.get(id)
+            return render_template('authors.html', user=user, blogs=blogs)
+
 @app.route('/blogs')
 def get_blogs():
 
@@ -54,26 +63,24 @@ def get_blogs():
 
     return render_template('blogs.html', blogs=blogs)
 
-@app.route('/blog')
-def get_blog():
+@app.route('/blog/<id>')
+def get_blog(id):
     if request.method == 'GET':
-        id = request.args.get('id', type=str)
         if(id is None):
-            owner = Blog('NA', 'NA', blog.owner)
+            blog = Blog('NA', 'NA')
             blog.id = 1
             return render_template('blog.html', id=blog.id, title=blog.title, content=blog.content)
         elif(id is not None):
+            #return [ blog.title for blog in Blog.query.all() ]
+            #blog_owner = Blog.query.get(owner_id)
+            #user = User.query.filter_by(id=blog_owner).first()
+            #user = User.query.get(id)
             blog = Blog.query.get(id)
-            return render_template('blog.html', id=blog.id, title=blog.title, content=blog.content)
-    else:
-        id = request.args.get('id', type=str)
-        if(id is None):
-            owner = Blog('NA', 'NA', blog.owner)
-            blog.id = 1
-            return render_template('blog.html', id=blog.id, title=blog.title, content=blog.content)
-        elif(id is not None):
-            blog = Blog.query.get(id)
-            return render_template('blog.html', id=blog.id, title=blog.title, content=blog.content)
+            user_num = blog.owner_id
+            user = User.query.filter_by(id=user_num).first()
+            #owner = User.query.filter_by(username=session['username']).first()
+            print(blog)
+            return render_template('blog.html', user=user, id=blog.id, title=blog.title, content=blog.content)
 
 @app.route('/newpost', methods=['POST', 'GET'])
 def new_post():
@@ -96,10 +103,8 @@ def new_post():
         new_blog = Blog(title, content, owner)
         db.session.add(new_blog)
         db.session.commit()
-        title = request.form['title']
-        content = request.form['content']
-        id = new_blog.id
-        return render_template('blog.html', title=title, content=content, id=id)
+        print(new_blog.id)
+        return redirect(url_for('get_blog' , id=new_blog.id))
     else:
         return render_template('newpost.html')
 
@@ -175,3 +180,4 @@ def signup():
 
 if __name__ == "__main__":
     app.run()
+
