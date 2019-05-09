@@ -8,7 +8,7 @@
         <div class='cards'>
             {% for blog in blogs %}
             <div class='blog-card'>
-                <h3><a class='blog-link' href="/blog/{{blog.id}}">{{ blog.title }}</a></h3>
+                <h3><a class='blog-link' href="/blog?id={{blog.id}}">{{ blog.title }}</a></h3>
                 <p class='blog-card-body'>{{blog.content}}</p>
             </div>
             {% endfor %}

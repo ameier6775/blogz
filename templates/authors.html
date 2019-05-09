@@ -7,7 +7,7 @@
         <ul>
         {% for blog in blogs %}
         {% if blog.owner_id == user.id %}
-        <td><li><a href="/blog/{{blog.id}}">{{ blog.title }}</a></li>>{{ blog.content }}</td>
+        <td><li><a href="/blog?id={{blog.id}}">{{ blog.title }}</a></li>>{{ blog.content }}</td>
         {% endif %}
         {% endfor %}
         </ul>

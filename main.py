@@ -47,13 +47,16 @@ def require_login():
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')        
 
-@app.route('/author/<id>')
-def get_author(id):
+@app.route('/author')
+def get_author():
+    print('🧐', request.args)
+    user = request.args.get("user")
+    print('😙', user)
     if request.method == 'GET':
-        if(id is not None):
-            users = User.query.filter_by(exist=True, id=id).all()
+        if(user is not None):
+            users = User.query.filter_by(exist=True, id=user).all()
             blogs = Blog.query.filter_by(exist=True).all()
-            user = User.query.get(id)
+            user = User.query.get(user)
             return render_template('authors.html', user=user, blogs=blogs)
 
 @app.route('/blogs')
@@ -63,23 +66,19 @@ def get_blogs():
 
     return render_template('blogs.html', blogs=blogs)
 
-@app.route('/blog/<id>')
-def get_blog(id):
+@app.route('/blog')
+def get_blog():
+    id = request.args.get("id", str)
+
     if request.method == 'GET':
         if(id is None):
             blog = Blog('NA', 'NA')
             blog.id = 1
             return render_template('blog.html', id=blog.id, title=blog.title, content=blog.content)
         elif(id is not None):
-            #return [ blog.title for blog in Blog.query.all() ]
-            #blog_owner = Blog.query.get(owner_id)
-            #user = User.query.filter_by(id=blog_owner).first()
-            #user = User.query.get(id)
             blog = Blog.query.get(id)
             user_num = blog.owner_id
             user = User.query.filter_by(id=user_num).first()
-            #owner = User.query.filter_by(username=session['username']).first()
-            print(blog)
             return render_template('blog.html', user=user, id=blog.id, title=blog.title, content=blog.content)
 
 @app.route('/newpost', methods=['POST', 'GET'])
